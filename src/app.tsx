@@ -1,9 +1,9 @@
 import {Box, Portal, ThemeProvider, studioTheme, useGlobalKeyDown} from '@sanity/ui'
 import {SanityDocument, EditorLayout, DialogLabels} from './types'
 import Editor from './Editor'
-import * as React from 'react'
+import React, {useState, useCallback} from 'react'
 import isHotkey from 'is-hotkey'
-// import defaultLayout from './defaultLayout'
+import defaultLayout from "./defaultLayout";
 
 interface SelectedAsset {
   [key: string]: any
@@ -11,7 +11,7 @@ interface SelectedAsset {
 
 type Props = {
   // User-provided. See README for how they set it up
-  layouts?: EditorLayout[]
+  layouts: EditorLayout[]
   dialog?: DialogLabels
   // The props below are provided by Sanity
   /**
@@ -33,30 +33,30 @@ type Props = {
 const MediaEditor: React.FC<Props> = (props) => {
   const {tool, onClose, dialog} = props
 
-  const handleGlobalKeyDown = React.useCallback((event: KeyboardEvent) => {
+  const handleGlobalKeyDown = useCallback((event: KeyboardEvent) => {
     if (isHotkey('esc', event) && onClose) {
       onClose()
     }
   }, [])
   useGlobalKeyDown(handleGlobalKeyDown)
 
-  // const layouts = props.layouts?.filter((layout) => layout.prepare && layout.component)
+  let layouts = props.layouts?.filter(layout => layout.prepare && layout.component)
 
-  // if (!layouts?.length) {
-  //   layouts = [defaultLayout]
-  // }
-  // if (!layouts?.length) {
-  //   if (props.onClose) {
-  //     props.onClose()
-  //   }
-  //   return null
-  // }
+  if (!layouts?.length) {
+    layouts = [defaultLayout]
+  }
+  if (!layouts?.length) {
+    if (onClose) {
+      onClose()
+    }
+    return null
+  }
 
   const document: SanityDocument = props.document || {_id: 'unknown'}
 
   const editorProps = {
     document,
-    // layouts,
+    layouts,
     onSelect: props.onSelect,
     onClose: props.onClose,
     dialog: dialog,
@@ -70,7 +70,7 @@ const MediaEditor: React.FC<Props> = (props) => {
             position: 'relative',
           }}
         >
-          {/*<Editor {...editorProps} />*/}
+          <Editor {...editorProps} />
         </Box>
       ) : (
         <Portal>
@@ -85,7 +85,7 @@ const MediaEditor: React.FC<Props> = (props) => {
               zIndex: 10000,
             }}
           >
-            {/*<Editor {...editorProps} />*/}
+            <Editor {...editorProps} />
           </Box>
         </Portal>
       )}

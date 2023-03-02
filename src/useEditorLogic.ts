@@ -6,7 +6,7 @@ import React, {useEffect, useState} from 'react'
 import defaultLayout from './defaultLayout'
 import {EditorProps} from './Editor'
 
-function useEditorLogic(props: EditorProps): {
+function useEditorLogic({document, layouts, onSelect}: EditorProps): {
   activeLayout: EditorLayout
   setActiveLayout: (newLayout: EditorLayout) => void
   disabled: boolean
@@ -17,22 +17,24 @@ function useEditorLogic(props: EditorProps): {
 } {
   const captureRef = React.useRef<HTMLDivElement>()
 
-  const [status, setStatus] = React.useState<'idle' | 'error' | 'loading' | 'success'>('idle')
+  const [status, setStatus] = useState<'idle' | 'error' | 'loading' | 'success'>('idle')
   const disabled = status === 'loading'
+  const layoutsExist = layouts && layouts[0]?.component;
 
   const [activeLayout, setActiveLayout] = useState<EditorLayout>(
-    props.layouts && props.layouts[0]?.component ? props.layouts[0] : defaultLayout
+    layoutsExist ? layouts[0] : defaultLayout
   )
-  const [data, setData] = React.useState<LayoutData>(
+  const [data, setData] = useState<LayoutData>(
     // Only asset sources (which include onSelect) should use the prepare function
-    activeLayout.prepare && props.onSelect
-      ? activeLayout.prepare(props.document)
+    onSelect
+      ? activeLayout.prepare(document)
       : // Studio tools should start with empty data
         {}
   )
+  const prepare = activeLayout.prepare(document);
 
   useEffect(() => {
-    setData(activeLayout && activeLayout.prepare(props.document))
+    setData(prepare);
   }, [activeLayout])
 
   async function generateImage(e: React.FormEvent) {
@@ -47,11 +49,11 @@ function useEditorLogic(props: EditorProps): {
         pixelRatio: 1,
       })
       setStatus('success')
-      if (props.onSelect) {
-        props.onSelect([
+      if (onSelect) {
+        onSelect([
           {
             kind: 'base64',
-            value: imgBase64,
+            // value: imgBase64,
             assetDocumentProps: {
               originalFilename: `OG Image - ${new Date(Date.now()).toISOString()}`,
               source: {

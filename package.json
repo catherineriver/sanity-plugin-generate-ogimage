@@ -48,7 +48,8 @@
   "dependencies": {
     "@sanity/incompatible-plugin": "^1.0.4",
     "downloadjs": "^1.4.7",
-    "html-to-image": "^1.11.11"
+    "html-to-image": "^1.11.11",
+    "vite-plugin-node-polyfills": "^0.7.0"
   },
   "devDependencies": {
     "@sanity/pkg-utils": "^2.2.6",

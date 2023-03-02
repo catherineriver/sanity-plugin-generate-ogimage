@@ -1,5 +1,5 @@
 import {Card, Container, Stack} from '@sanity/ui'
-import {EditorLayout, PrepareFunction, SanityImage} from './types'
+import {EditorLayout, LayoutData, PrepareFunction, SanityImage} from './types'
 import * as React from 'react'
 // import styled from 'styled-components'
 
@@ -30,11 +30,8 @@ interface DefaultLayoutProps {
 //   bottom: 1em;
 // `
 
-export const DefaultLayoutComponent: React.FC<DefaultLayoutProps> = ({
+export const DefaultLayoutComponent: React.FC<LayoutData> = ({
   title,
-  logo,
-  subtitle,
-  includeBorder,
 }) => {
   return (
     <Card
@@ -45,7 +42,6 @@ export const DefaultLayoutComponent: React.FC<DefaultLayoutProps> = ({
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
-        border: includeBorder ? '5px solid var(--card-border-color)' : 'none',
         boxSizing: 'border-box',
         textAlign: 'center',
         position: 'relative',
@@ -55,10 +51,6 @@ export const DefaultLayoutComponent: React.FC<DefaultLayoutProps> = ({
       <Container>
         <Stack space={3}>
           {title && <h1>{title}</h1>}
-          {subtitle && <h2>{subtitle}</h2>}
-          <div>
-            <Image image={logo} width={100} />
-          </div>
         </Stack>
       </Container>
     </Card>
@@ -66,7 +58,7 @@ export const DefaultLayoutComponent: React.FC<DefaultLayoutProps> = ({
 }
 
 // Ideally, users will provide their own prepare function, this is an unlikely fallback
-export const defaultPrepare: PrepareFunction<DefaultLayoutProps> = (document) => {
+export const defaultPrepare: PrepareFunction<LayoutData> = (document) => {
   return {
     // Possible common values for title & image
     title: document.title || document.seoTitle || document.seo?.title || document.hero?.title,
@@ -75,7 +67,7 @@ export const defaultPrepare: PrepareFunction<DefaultLayoutProps> = (document) =>
   }
 }
 
-const defaultLayout: EditorLayout<DefaultLayoutProps> = {
+const defaultLayout: EditorLayout = {
   name: 'default',
   title: 'Default layout',
   component: DefaultLayoutComponent,

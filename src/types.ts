@@ -88,7 +88,7 @@ export type EditorLayout<Data = LayoutData> = {
    * Function which gets the current document.
    * Is irrelevant in the context of studio tools as the layout won't receive a document, so if you're only using it there you can ignore this.
    */
-  prepare?: PrepareFunction<Data>
+  prepare: PrepareFunction<Data>
   /**
    * Fields editable by users to change the component data and see changes in the layout live.
    */

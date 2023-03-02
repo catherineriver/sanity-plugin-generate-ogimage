@@ -8,7 +8,7 @@ import LayoutsPicker from './LayoutsPicker'
 import useEditorLogic from './useEditorLogic'
 
 export interface EditorProps {
-  layouts?: EditorLayout[]
+  layouts: EditorLayout[]
   onSelect?: (...props: any) => void
   onClose?: () => void
   document: SanityDocument
@@ -86,14 +86,16 @@ const Editor: React.FC<EditorProps> = (props) => {
           sizing="border"
         >
           <Stack space={4}>
-            {fields.map((field) => (
-              <EditorField
-                field={field}
-                updateData={(newData) => setData(newData)}
-                data={data}
-                disabled={disabled}
-              />
-            ))}
+            fields here
+            {/*{fields.map((field) => (*/}
+            {/*  <EditorField*/}
+            {/*    key={field.type}*/}
+            {/*    field={field}*/}
+            {/*    updateData={(newData) => setData(newData)}*/}
+            {/*    data={data}*/}
+            {/*    disabled={disabled}*/}
+            {/*  />*/}
+            {/*))}*/}
           </Stack>
         </Card>
         <Card
