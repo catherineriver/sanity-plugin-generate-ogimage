@@ -29,9 +29,10 @@ type Props = {
   document?: SanityDocument
   selectedAssets?: SelectedAsset[]
   selectionType: 'single'
+  darkMode?: boolean
 }
 const MediaEditor: React.FC<Props> = (props) => {
-  const {tool, onClose, dialog} = props
+  const {tool, onClose, dialog, onSelect, darkMode} = props
 
   const handleGlobalKeyDown = useCallback((event: KeyboardEvent) => {
     if (isHotkey('esc', event) && onClose) {
@@ -57,9 +58,9 @@ const MediaEditor: React.FC<Props> = (props) => {
   const editorProps = {
     document,
     layouts,
-    onSelect: props.onSelect,
-    onClose: props.onClose,
-    dialog: dialog,
+    onSelect,
+    onClose,
+    dialog,
   }
   return (
     <ThemeProvider theme={studioTheme}>
@@ -70,7 +71,7 @@ const MediaEditor: React.FC<Props> = (props) => {
             position: 'relative',
           }}
         >
-          <Editor {...editorProps} />
+          <Editor darkMode={darkMode} {...editorProps} />
         </Box>
       ) : (
         <Portal>
@@ -80,12 +81,12 @@ const MediaEditor: React.FC<Props> = (props) => {
               height: 'auto',
               left: 0,
               position: 'fixed',
-              top: 0,
+              top: 50,
               width: '100%',
-              zIndex: 10000,
+              zIndex: 25002,
             }}
           >
-            <Editor {...editorProps} />
+            <Editor darkMode={darkMode} {...editorProps} />
           </Box>
         </Portal>
       )}

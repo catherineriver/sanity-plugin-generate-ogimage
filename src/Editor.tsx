@@ -1,7 +1,8 @@
-import {Button, Card, Flex, Inline, Spinner, Stack, Text} from '@sanity/ui'
+import {Button, Card, Flex, Inline, Spinner, Stack, Text, TextArea, TextInput} from '@sanity/ui'
 import {CloseIcon, GenerateIcon} from '@sanity/icons'
 import {DialogLabels, EditorLayout, SanityDocument} from './types'
 import * as React from 'react'
+import FormField from 'sanity'
 
 import EditorField from './EditorField'
 import LayoutsPicker from './LayoutsPicker'
@@ -13,6 +14,7 @@ export interface EditorProps {
   onClose?: () => void
   document: SanityDocument
   dialog?: DialogLabels
+  darkMode?: boolean
 }
 
 const DEFAULT_DIMENSIONS = {
@@ -23,22 +25,23 @@ const DEFAULT_DIMENSIONS = {
 const Editor: React.FC<EditorProps> = (props) => {
   const {activeLayout, setActiveLayout, generateImage, disabled, captureRef, data, setData} =
     useEditorLogic(props)
+  const {dialog, onClose, layouts, darkMode } = props;
 
   const LayoutComponent = activeLayout.component as any
   const fields = activeLayout.fields || []
-
   const width = activeLayout.dimensions?.width || DEFAULT_DIMENSIONS.width
   const height = activeLayout.dimensions?.height || DEFAULT_DIMENSIONS.height
 
   return (
     <Card
-      scheme="light"
+      scheme={darkMode ? 'dark' : 'light'}
       height="fill"
       sizing="border"
       display="flex"
       style={{flexDirection: 'column'}}
     >
       <Card
+        scheme={darkMode ? 'dark' : 'light'}
         tone="default"
         padding={4}
         marginBottom={[4, 0]}
@@ -48,24 +51,24 @@ const Editor: React.FC<EditorProps> = (props) => {
         <Flex justify="space-between" align="center">
           <Inline space={3}>
             <Text size={3} weight="semibold">
-              {props.dialog?.title || 'Create image'}
+              {dialog?.title || 'Create image'}
             </Text>
             <Button
               icon={disabled ? Spinner : GenerateIcon}
               tone="positive"
-              text={props.dialog?.finishCta || 'Generate'}
+              text={dialog?.finishCta || 'Generate'}
               onClick={generateImage}
               disabled={disabled}
             />
           </Inline>
           {/* If onClose is defined, we're in an assetSource, where we should provide a header with a close button */}
-          {props.onClose && (
+          {onClose && (
             <Button
-              onClick={props.onClose}
+              onClick={onClose}
               icon={CloseIcon}
               mode="bleed"
               tone="critical"
-              title={props.dialog?.ariaClose || 'close'}
+              title={dialog?.ariaClose || 'close'}
             />
           )}
         </Flex>
@@ -86,16 +89,15 @@ const Editor: React.FC<EditorProps> = (props) => {
           sizing="border"
         >
           <Stack space={4}>
-            fields here
-            {/*{fields.map((field) => (*/}
-            {/*  <EditorField*/}
-            {/*    key={field.type}*/}
-            {/*    field={field}*/}
-            {/*    updateData={(newData) => setData(newData)}*/}
-            {/*    data={data}*/}
-            {/*    disabled={disabled}*/}
-            {/*  />*/}
-            {/*))}*/}
+            {fields.map((field) => (
+              <EditorField
+                key={field.name}
+                field={field}
+                updateData={(newData) => setData(newData)}
+                data={data}
+                disabled={disabled}
+              />
+            ))}
           </Stack>
         </Card>
         <Card
@@ -110,7 +112,7 @@ const Editor: React.FC<EditorProps> = (props) => {
         >
           <Stack space={3}>
             <LayoutsPicker
-              layouts={props.layouts}
+              layouts={layouts}
               activeLayout={activeLayout}
               disabled={disabled}
               setActiveLayout={setActiveLayout}

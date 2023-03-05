@@ -1,7 +1,7 @@
 import {EditorLayout, LayoutData} from './types'
 import download from 'downloadjs'
 import {toPng} from 'html-to-image'
-import React, {useEffect, useState} from 'react'
+import React, {useEffect, useState, useRef} from 'react'
 
 import defaultLayout from './defaultLayout'
 import {EditorProps} from './Editor'
@@ -11,11 +11,11 @@ function useEditorLogic({document, layouts, onSelect}: EditorProps): {
   setActiveLayout: (newLayout: EditorLayout) => void
   disabled: boolean
   generateImage: (e: React.FormEvent) => void
-  captureRef: React.MutableRefObject<HTMLDivElement>
+  captureRef?: React.MutableRefObject<HTMLDivElement>
   data: LayoutData
   setData: (newData: LayoutData) => void
 } {
-  const captureRef = React.useRef<HTMLDivElement>()
+  const captureRef = useRef<HTMLDivElement>()
 
   const [status, setStatus] = useState<'idle' | 'error' | 'loading' | 'success'>('idle')
   const disabled = status === 'loading'
@@ -24,13 +24,16 @@ function useEditorLogic({document, layouts, onSelect}: EditorProps): {
   const [activeLayout, setActiveLayout] = useState<EditorLayout>(
     layoutsExist ? layouts[0] : defaultLayout
   )
+  // @ts-ignore
   const [data, setData] = useState<LayoutData>(
     // Only asset sources (which include onSelect) should use the prepare function
     onSelect
+      // @ts-ignore
       ? activeLayout.prepare(document)
       : // Studio tools should start with empty data
         {}
   )
+  // @ts-ignore
   const prepare = activeLayout.prepare(document);
 
   useEffect(() => {
@@ -53,7 +56,7 @@ function useEditorLogic({document, layouts, onSelect}: EditorProps): {
         onSelect([
           {
             kind: 'base64',
-            // value: imgBase64,
+            value: imgBase64,
             assetDocumentProps: {
               originalFilename: `OG Image - ${new Date(Date.now()).toISOString()}`,
               source: {
