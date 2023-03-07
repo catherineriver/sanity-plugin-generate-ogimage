@@ -11,11 +11,11 @@ function useEditorLogic({document, layouts, onSelect}: EditorProps): {
   setActiveLayout: (newLayout: EditorLayout) => void
   disabled: boolean
   generateImage: (e: React.FormEvent) => void
-  captureRef?: React.MutableRefObject<HTMLDivElement>
+  captureRef?: React.RefObject<HTMLDivElement>;
   data: LayoutData
   setData: (newData: LayoutData) => void
 } {
-  const captureRef = useRef<HTMLDivElement>()
+  const captureRef = useRef<HTMLDivElement>(null)
 
   const [status, setStatus] = useState<'idle' | 'error' | 'loading' | 'success'>('idle')
   const disabled = status === 'loading'
@@ -23,8 +23,10 @@ function useEditorLogic({document, layouts, onSelect}: EditorProps): {
 
   const [activeLayout, setActiveLayout] = useState<EditorLayout>(
     layoutsExist ? layouts[0] : defaultLayout
-  )
+  );
   // @ts-ignore
+  const prepare = activeLayout.prepare(document);
+
   const [data, setData] = useState<LayoutData>(
     // Only asset sources (which include onSelect) should use the prepare function
     onSelect
@@ -33,8 +35,6 @@ function useEditorLogic({document, layouts, onSelect}: EditorProps): {
       : // Studio tools should start with empty data
         {}
   )
-  // @ts-ignore
-  const prepare = activeLayout.prepare(document);
 
   useEffect(() => {
     setData(prepare);
