@@ -1,37 +1,11 @@
 import {Card, Container, Stack} from '@sanity/ui'
-import {EditorLayout, LayoutData, PrepareFunction, SanityImage} from './types'
+import {EditorLayout, LayoutData, PrepareFunction} from './types'
 import * as React from 'react'
-// import styled from 'styled-components'
-
-import Image from './Image'
-
-interface DefaultLayoutProps {
-  title?: string
-  logo?: SanityImage
-  subtitle?: string
-  includeBorder: boolean
-}
-
-// const Title = styled.h1`
-//   font-size: 58px;
-//   font-weight: 600;
-//   margin: 0;
-// `
-//
-// const SubTitle = styled.h2`
-//   font-size: 30px;
-//   font-weight: 400;
-//   margin: 0;
-// `
-//
-// const LogoWrapper = styled.div`
-//   position: absolute;
-//   right: 1em;
-//   bottom: 1em;
-// `
 
 export const DefaultLayoutComponent: React.FC<LayoutData> = ({
   title,
+  subtitle,
+  logo
 }) => {
   return (
     <Card
@@ -51,6 +25,8 @@ export const DefaultLayoutComponent: React.FC<LayoutData> = ({
       <Container>
         <Stack space={3}>
           {title && <h1>{title}</h1>}
+          {subtitle && <h2>{subtitle}</h2>}
+          {logo && <img src={logo} alt="Logo" />}
         </Stack>
       </Container>
     </Card>
@@ -87,11 +63,6 @@ const defaultLayout: EditorLayout = {
       title: 'Logo / image',
       name: 'logo',
       type: 'image',
-    },
-    {
-      title: 'Include borders',
-      name: 'includeBorder',
-      type: 'boolean',
     },
   ],
 }

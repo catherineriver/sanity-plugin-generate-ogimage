@@ -1,8 +1,7 @@
-import {Button, Card, Flex, Inline, Spinner, Stack, Text, TextArea, TextInput} from '@sanity/ui'
+import {Button, Card, Flex, Inline, Spinner, Stack, Text} from '@sanity/ui'
 import {CloseIcon, GenerateIcon} from '@sanity/icons'
 import {DialogLabels, EditorLayout, SanityDocument} from './types'
 import * as React from 'react'
-import FormField from 'sanity'
 
 import EditorField from './EditorField'
 import LayoutsPicker from './LayoutsPicker'
