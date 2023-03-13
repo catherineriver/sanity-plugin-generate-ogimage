@@ -1,4 +1,4 @@
-import {Card, Container, Stack} from '@sanity/ui'
+import {Card, Container, Stack, usePrefersDark} from '@sanity/ui'
 import {EditorLayout, LayoutData, PrepareFunction} from './types'
 import * as React from 'react'
 
@@ -7,9 +7,11 @@ export const DefaultLayoutComponent: React.FC<LayoutData> = ({
   subtitle,
   logo
 }) => {
+  const prefersDark = usePrefersDark();
+  const scheme = prefersDark ? 'dark' : 'light';
   return (
     <Card
-      scheme="light"
+      scheme={scheme}
       style={{
         width: '100%',
         height: '100%',

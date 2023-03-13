@@ -1,7 +1,7 @@
-import {Box, Portal, ThemeProvider, studioTheme, useGlobalKeyDown} from '@sanity/ui'
+import {Box, Portal, ThemeProvider, studioTheme, useGlobalKeyDown, usePrefersDark} from '@sanity/ui'
 import {SanityDocument, EditorLayout, DialogLabels} from './types'
 import Editor from './Editor'
-import React, {useState, useCallback} from 'react'
+import React, {useCallback} from 'react'
 import isHotkey from 'is-hotkey'
 import defaultLayout from "./defaultLayout";
 
@@ -32,7 +32,9 @@ type Props = {
   darkMode?: boolean
 }
 const MediaEditor: React.FC<Props> = (props) => {
-  const {tool, onClose, dialog, onSelect, darkMode} = props
+  const {tool, onClose, dialog, onSelect} = props
+  const prefersDark = usePrefersDark();
+  const scheme = prefersDark ? 'dark' : 'light';
 
   const handleGlobalKeyDown = useCallback((event: KeyboardEvent) => {
     if (isHotkey('esc', event) && onClose) {
@@ -71,7 +73,7 @@ const MediaEditor: React.FC<Props> = (props) => {
             position: 'relative',
           }}
         >
-          <Editor darkMode={darkMode} {...editorProps} />
+          <Editor scheme={scheme} {...editorProps} />
         </Box>
       ) : (
         <Portal>
@@ -86,7 +88,7 @@ const MediaEditor: React.FC<Props> = (props) => {
               zIndex: 25002,
             }}
           >
-            <Editor darkMode={darkMode} {...editorProps} />
+            <Editor scheme={scheme} {...editorProps} />
           </Box>
         </Portal>
       )}

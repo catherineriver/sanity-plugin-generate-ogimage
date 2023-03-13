@@ -7,13 +7,14 @@ import EditorField from './EditorField'
 import LayoutsPicker from './LayoutsPicker'
 import useEditorLogic from './useEditorLogic'
 
+
 export interface EditorProps {
   layouts: EditorLayout[]
   onSelect?: (...props: any) => void
   onClose?: () => void
   document: SanityDocument
   dialog?: DialogLabels
-  darkMode?: boolean
+  scheme?: 'dark' | 'light';
 }
 
 const DEFAULT_DIMENSIONS = {
@@ -24,8 +25,7 @@ const DEFAULT_DIMENSIONS = {
 const Editor: React.FC<EditorProps> = (props) => {
   const {activeLayout, setActiveLayout, generateImage, disabled, captureRef, data, setData} =
     useEditorLogic(props)
-  const {dialog, onClose, layouts, darkMode } = props;
-
+  const {dialog, onClose, layouts, scheme } = props;
   const LayoutComponent = activeLayout.component as any
   const fields = activeLayout.fields || []
   const width = activeLayout.dimensions?.width || DEFAULT_DIMENSIONS.width
@@ -33,14 +33,14 @@ const Editor: React.FC<EditorProps> = (props) => {
 
   return (
     <Card
-      scheme={darkMode ? 'dark' : 'light'}
+      scheme={scheme}
       height="fill"
       sizing="border"
       display="flex"
       style={{flexDirection: 'column'}}
     >
       <Card
-        scheme={darkMode ? 'dark' : 'light'}
+        scheme={scheme}
         tone="default"
         padding={4}
         marginBottom={[4, 0]}
@@ -82,6 +82,7 @@ const Editor: React.FC<EditorProps> = (props) => {
         padding={3}
       >
         <Card
+          scheme={scheme}
           padding={3}
           marginRight={4}
           style={{maxWidth: '350px', flex: '1 0 200px'}}
@@ -100,6 +101,7 @@ const Editor: React.FC<EditorProps> = (props) => {
           </Stack>
         </Card>
         <Card
+          scheme={scheme}
           height="fill"
           overflow="auto"
           style={{
