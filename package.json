@@ -1,7 +1,7 @@
 {
   "name": "@catherineriver/sanity-plugin-generate-ogimage",
   "version": "1.0.3",
-  "description": "This is a Sanity Studio v3 plugin for generating og:image",
+  "description": "This is a Sanity Studio v3 plugin.",
   "keywords": [
     "sanity",
     "sanity-plugin"
