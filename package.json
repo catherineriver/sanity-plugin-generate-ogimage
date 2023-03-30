@@ -6,13 +6,16 @@
     "sanity",
     "sanity-plugin"
   ],
+  "publishConfig": {
+    "@catherineriver:registry": "https://npm.pkg.github.com"
+  },
   "homepage": "https://github.com/catherineriver/sanity-plugin-generate-ogimage#readme",
   "bugs": {
     "url": "https://github.com/catherineriver/sanity-plugin-generate-ogimage/issues"
   },
   "repository": {
     "type": "git",
-    "url": "git+ssh://git@github.com/catherineriver/sanity-plugin-generate-ogimage.git"
+    "url": "git+ssh://git@github.com:catherineriver/sanity-plugin-generate-ogimage.git"
   },
   "license": "MIT",
   "author": "Katerina Baliasnikova <catherine_river@icloud.com>",
