@@ -69,18 +69,17 @@ const EditorField: React.FC<EditorFieldProps> = ({field, data = {}, updateData, 
   }
 
   function onChange(e: React.FormEvent<HTMLInputElement | HTMLTextAreaElement>) {
-    setValue(e.currentTarget.value || '')
     if (e.currentTarget.type === 'checkbox' && 'checked' in e.currentTarget) {
       setValue(e.currentTarget.checked)
     }
     if (e.currentTarget.type === 'number') {
       setValue(Number(value))
     }
-    e.preventDefault()
     updateData({
       ...data,
-      [field.name]: value,
+      [field.name]: e.currentTarget.value,
     })
+    setValue( e.currentTarget.value || '');
   }
 
   const commonProps = {
