@@ -8,7 +8,7 @@ Based on [sanity-plugin-asset-source-ogimage](https://www.npmjs.com/package/sani
 🚨 You need ```@sanity 3.5.0``` or greater and ```react 18.0.0``` or greater
 
 ```sh
-npm install sanity-plugin-generate-ogimage
+npm install @catherineriver/sanity-plugin-generate-ogimage
 ```
 
 ## Usage
