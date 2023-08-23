@@ -1,8 +1,15 @@
-# Sanity Asset Source Plugin for OG image generation
+# Sanity Plugin: Generate OG Image
 
 > This is a **Sanity Studio v3** plugin for generating OG images.
 
 Based on [sanity-plugin-asset-source-ogimage](https://www.npmjs.com/package/sanity-plugin-asset-source-ogimage) for Sanity Studio v2
+
+This Sanity plugin provides a tool to generate Open Graph (OG) images for your Sanity documents. It's designed to be flexible, allowing you to define custom layouts for the generated images.
+
+## Features
+`Custom Layouts`: Define your own layouts for the generated images.
+`Live Preview`: See changes in real-time as you adjust the layout and content.
+`Download & Generate`: Generate the image and download it directly or use it within your Sanity documents.
 
 ## Installation
 🚨 You need ```@sanity 3.5.0``` or greater and ```react 18.0.0``` or greater
@@ -11,7 +18,7 @@ Based on [sanity-plugin-asset-source-ogimage](https://www.npmjs.com/package/sani
 npm install sanity-plugin-generate-ogimage
 ```
 
-## Usage
+## Basic Usage
 ### As a studio tool
 
 Use it in `sanity.config.ts` (or .js):
@@ -47,11 +54,43 @@ Use it as [source on a single type](https://www.sanity.io/docs/custom-asset-sour
 }
 ```
 
-## Testing
-```npx yalc add sanity-plugin-generate-ogimage && npx yalc add sanity-plugin-generate-ogimage --link && npm install```
- 
+## Advanced Usage with Custom Layouts
+You can define custom layouts for your generated images. A layout is essentially a React component that receives certain props and renders the desired output.
 
+Here's a basic structure of a layout:
 
+```jsx
+import React from "react";
+import { LayoutData } from "sanity-plugin-generate-ogimage/types";
+
+const MyCustomLayout: React.FC<LayoutData> = ({ title, subtitle, logo }) => {
+  // Your rendering logic here
+};
+
+export default MyCustomLayout;
+```
+
+To use your custom layouts, modify your sanity.config.ts (or .js) as follows:
+```jsx
+import { defineConfig } from "sanity";
+import { generateOGImage } from "sanity-plugin-generate-ogimage";
+import MyCustomLayout from "./path-to-your-layout";
+
+export default defineConfig({
+  // ... other config
+  plugins: [generateOGImage({ layouts: [MyCustomLayout] })],
+});
+```
+
+## Components
+Here's a brief overview of the main components in the repository:
+
+`Editor`: The main editor component where users can select a layout, modify content, and generate the image.
+`Image`: A utility component to display Sanity images.
+`LayoutsPicker`: Allows users to pick from multiple available layouts.
+`EditorField`: Represents individual fields in the editor, like text inputs, switches, etc.
+`useEditorLogic`: A custom hook that encapsulates the logic for generating and downloading the image.
+`imageBuilder`: A utility to build image URLs using Sanity's image URL builder.
 
 ## License
 
