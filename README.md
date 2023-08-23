@@ -47,8 +47,8 @@ Use it as [source on a single type](https://www.sanity.io/docs/custom-asset-sour
 }
 ```
 
-## Docs
-  WIP
+## Testing
+`npx yalc add sanity-plugin-generate-ogimage && npx yalc add sanity-plugin-generate-ogimage --link && npm install'
  
 
 
