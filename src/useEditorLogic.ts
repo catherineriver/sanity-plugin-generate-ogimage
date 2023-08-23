@@ -1,16 +1,17 @@
-import {EditorLayout, LayoutData} from './types'
+import { EditorLayout, LayoutData } from './types'
 import download from 'downloadjs'
-import {toPng} from 'html-to-image'
-import React, {useEffect, useState, useRef} from 'react'
+import { toPng } from 'html-to-image'
+import React, { useEffect, useState, useRef } from 'react'
 
 import defaultLayout from './defaultLayout'
-import {EditorProps} from './Editor'
+import { EditorProps } from './Editor'
 
-function useEditorLogic({document, layouts, onSelect}: EditorProps): {
+function useEditorLogic({ document, layouts, onSelect }: EditorProps): {
   activeLayout: EditorLayout
   setActiveLayout: (newLayout: EditorLayout) => void
   disabled: boolean
   generateImage: (e: React.FormEvent) => void
+  downloadImage: (e: React.FormEvent) => void
   captureRef?: React.RefObject<HTMLDivElement>;
   data: LayoutData
   setData: (newData: LayoutData) => void
@@ -33,7 +34,7 @@ function useEditorLogic({document, layouts, onSelect}: EditorProps): {
       // @ts-ignore
       ? activeLayout.prepare(document)
       : // Studio tools should start with empty data
-        {}
+      {}
   )
 
   useEffect(() => {
@@ -66,9 +67,27 @@ function useEditorLogic({document, layouts, onSelect}: EditorProps): {
             },
           },
         ])
-      } else {
-        download(imgBase64, 'generated.png')
       }
+    } catch (error) {
+      setStatus('error')
+      console.error(error)
+    }
+  }
+
+  async function downloadImage(e: React.FormEvent) {
+    e.preventDefault()
+    if (!captureRef?.current) {
+      return
+    }
+    try {
+      setStatus('loading')
+      const imgBase64 = await toPng(captureRef.current, {
+        quality: 1,
+        pixelRatio: 1,
+      })
+      setStatus('success')
+      download(imgBase64, 'generated.png')
+
     } catch (error) {
       setStatus('error')
       console.error(error)
@@ -80,6 +99,7 @@ function useEditorLogic({document, layouts, onSelect}: EditorProps): {
     setActiveLayout,
     disabled,
     generateImage,
+    downloadImage,
     captureRef,
     data,
     setData,
