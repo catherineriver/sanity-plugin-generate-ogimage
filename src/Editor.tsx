@@ -1,6 +1,6 @@
-import {Button, Card, Flex, Inline, Spinner, Stack, Text} from '@sanity/ui'
-import {CloseIcon, GenerateIcon} from '@sanity/icons'
-import {DialogLabels, EditorLayout, SanityDocument} from './types'
+import { Button, Card, Flex, Inline, Spinner, Stack, Text } from '@sanity/ui'
+import { CloseIcon, GenerateIcon, DownloadIcon } from '@sanity/icons'
+import { DialogLabels, EditorLayout, SanityDocument } from './types'
 import * as React from 'react'
 
 import EditorField from './EditorField'
@@ -23,9 +23,9 @@ const DEFAULT_DIMENSIONS = {
 }
 
 const Editor: React.FC<EditorProps> = (props) => {
-  const {activeLayout, setActiveLayout, generateImage, disabled, captureRef, data, setData} =
+  const { activeLayout, setActiveLayout, generateImage, downloadImage, disabled, captureRef, data, setData } =
     useEditorLogic(props)
-  const {dialog, onClose, layouts, scheme } = props;
+  const { dialog, onClose, layouts, scheme } = props;
   const LayoutComponent = activeLayout.component as any
   const fields = activeLayout.fields || []
   const width = activeLayout.dimensions?.width || DEFAULT_DIMENSIONS.width
@@ -37,7 +37,7 @@ const Editor: React.FC<EditorProps> = (props) => {
       height="fill"
       sizing="border"
       display="flex"
-      style={{flexDirection: 'column'}}
+      style={{ flexDirection: 'column' }}
     >
       <Card
         scheme={scheme}
@@ -45,18 +45,25 @@ const Editor: React.FC<EditorProps> = (props) => {
         padding={4}
         marginBottom={[4, 0]}
         borderBottom
-        style={{textAlign: 'right'}}
+        style={{ textAlign: 'right' }}
       >
         <Flex justify="space-between" align="center">
           <Inline space={3}>
             <Text size={3} weight="semibold">
               {dialog?.title || 'Create image'}
             </Text>
-            <Button
+            {onClose && (<Button
               icon={disabled ? Spinner : GenerateIcon}
               tone="positive"
               text={dialog?.finishCta || 'Generate'}
               onClick={generateImage}
+              disabled={disabled}
+            />)}
+            <Button
+              icon={disabled ? Spinner : DownloadIcon}
+              tone="default"
+              text={dialog?.finishCta || 'Download'}
+              onClick={downloadImage}
               disabled={disabled}
             />
           </Inline>
@@ -77,7 +84,7 @@ const Editor: React.FC<EditorProps> = (props) => {
         align="flex-start"
         wrap="wrap"
         overflow="auto"
-        style={{width: '100%', height: 'auto', minHeight: '0'}}
+        style={{ width: '100%', height: 'auto', minHeight: '0' }}
         sizing="border"
         padding={3}
       >
@@ -85,7 +92,7 @@ const Editor: React.FC<EditorProps> = (props) => {
           scheme={scheme}
           padding={3}
           marginRight={4}
-          style={{maxWidth: '350px', flex: '1 0 200px'}}
+          style={{ maxWidth: '350px', flex: '1 0 200px' }}
           sizing="border"
         >
           <Stack space={4}>

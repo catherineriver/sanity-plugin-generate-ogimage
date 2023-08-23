@@ -15,7 +15,7 @@ This Sanity plugin provides a tool to generate Open Graph (OG) images for your S
 🚨 You need ```@sanity 3.5.0``` or greater and ```react 18.0.0``` or greater
 
 ```sh
-npm install sanity-plugin-generate-ogimage
+npm install @catherineriver/sanity-plugin-generate-ogimage
 ```
 
 ## Basic Usage
