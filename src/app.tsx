@@ -1,9 +1,9 @@
-import { Box, Portal, ThemeProvider, studioTheme, useGlobalKeyDown, usePrefersDark } from '@sanity/ui'
-import { SanityDocument, EditorLayout, DialogLabels } from './types'
+import {Box, Portal, ThemeProvider, studioTheme, useGlobalKeyDown, usePrefersDark} from '@sanity/ui'
+import {SanityDocument, EditorLayout, DialogLabels} from './types'
 import Editor from './Editor'
-import React, { useCallback } from 'react'
+import React, {useCallback} from 'react'
 import isHotkey from 'is-hotkey'
-import defaultLayout from "./defaultLayout";
+import defaultLayout from './defaultLayout'
 
 interface SelectedAsset {
   [key: string]: any
@@ -32,11 +32,10 @@ type Props = {
   darkMode?: boolean
 }
 const MediaEditor: React.FC<Props> = (props) => {
-  const { tool, onClose, dialog, onSelect } = props
+  const {tool, onClose, dialog, onSelect} = props
 
-  const prefersDark = usePrefersDark();
-  const scheme = prefersDark ? 'dark' : 'light';
-
+  const prefersDark = usePrefersDark()
+  const scheme = prefersDark ? 'dark' : 'light'
 
   const handleGlobalKeyDown = useCallback((event: KeyboardEvent) => {
     if (isHotkey('esc', event) && onClose) {
@@ -46,7 +45,7 @@ const MediaEditor: React.FC<Props> = (props) => {
   useGlobalKeyDown(handleGlobalKeyDown)
 
   let layouts = tool?.props?.layouts || props?.layouts
-  layouts = layouts?.filter(layout => layout.prepare && layout.component)
+  layouts = layouts?.filter((layout) => layout.prepare && layout.component)
 
   if (!layouts?.length) {
     layouts = [defaultLayout]
@@ -58,7 +57,7 @@ const MediaEditor: React.FC<Props> = (props) => {
     return null
   }
 
-  const document: SanityDocument = props.document || { _id: 'unknown' }
+  const document: SanityDocument = props.document || {_id: 'unknown'}
 
   const editorProps = {
     document,

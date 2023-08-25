@@ -1,7 +1,6 @@
-import React, {useState} from 'react'
-import FormField from 'sanity'
+import React, {useState, useCallback} from 'react'
 import {LayoutData, LayoutField, LayoutFieldTypes} from './types'
-import {Box, Stack, Switch, Text, TextArea, TextInput, Label} from '@sanity/ui'
+import {Box, Stack, Switch, Text, TextArea, TextInput} from '@sanity/ui'
 
 interface EditorFieldProps {
   field: LayoutField
@@ -13,15 +12,36 @@ interface EditorFieldProps {
 const UNSUPORTED_TYPES: LayoutFieldTypes[] = ['array', 'date', 'datetime', 'image', 'reference']
 
 const EditorField: React.FC<EditorFieldProps> = ({field, data = {}, updateData, disabled}) => {
-  const [value, setValue] = useState(data[field.name])
+  const {type, name, title, unsupportedError} = field
+  const [value, setValue] = useState(data[name])
 
-  if (!field?.type || !field.name || !updateData) {
+  const onChange = useCallback(
+    (e: React.FormEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+      let newValue: number | string | boolean = e.currentTarget.value
+
+      if (e.currentTarget.type === 'checkbox' && 'checked' in e.currentTarget) {
+        newValue = e.currentTarget.checked
+      } else if (e.currentTarget.type === 'number') {
+        newValue = Number(value)
+      }
+
+      updateData({
+        ...data,
+        [name]: newValue,
+      });
+      setValue(newValue || '');
+    },
+    [data, name, updateData, value]
+  );
+
+
+  if (!type || !name || !updateData) {
     return null
   }
 
-  const label = field.title || field.name
+  const label = title || name
 
-  if (UNSUPORTED_TYPES.includes(field.type)) {
+  if (UNSUPORTED_TYPES.includes(type)) {
     return (
       <Box marginTop={2}>
         <Stack space={2}>
@@ -29,31 +49,20 @@ const EditorField: React.FC<EditorFieldProps> = ({field, data = {}, updateData, 
             {label}
           </Text>
           <Text size={0}>
-            {field.unsupportedError ||
-              'Close this dialog and edit the document to change this field.'}
+            {unsupportedError || 'Close this dialog and edit the document to change this field.'}
           </Text>
         </Stack>
       </Box>
     )
   }
 
-  if (field.type === 'object') {
-    if (!field.fields?.length) {
-      return null
-    }
-    // @TODO: fieldset
+  if (type === 'object' && field.fields?.length) {
     return (
       <div>
         {field.fields.map((fld) => (
-          // eslint-disable-next-line react/jsx-key
           <EditorField
             key={fld.name}
-            updateData={(newData) =>
-              updateData({
-                ...data,
-                [field.name]: newData,
-              })
-            }
+            updateData={updateData}
             field={fld}
             data={value}
             disabled={disabled}
@@ -63,23 +72,9 @@ const EditorField: React.FC<EditorFieldProps> = ({field, data = {}, updateData, 
     )
   }
 
-  if (!['boolean', 'number', 'text', 'string'].includes(field.type)) {
+  if (!['boolean', 'number', 'text', 'string'].includes(type)) {
     console.error('Asset-source OG Image: wrong field type received')
     return null
-  }
-
-  function onChange(e: React.FormEvent<HTMLInputElement | HTMLTextAreaElement>) {
-    if (e.currentTarget.type === 'checkbox' && 'checked' in e.currentTarget) {
-      setValue(e.currentTarget.checked)
-    }
-    if (e.currentTarget.type === 'number') {
-      setValue(Number(value))
-    }
-    updateData({
-      ...data,
-      [field.name]: e.currentTarget.value,
-    })
-    setValue( e.currentTarget.value || '');
   }
 
   const commonProps = {
@@ -87,13 +82,14 @@ const EditorField: React.FC<EditorFieldProps> = ({field, data = {}, updateData, 
     value,
     disabled,
   }
+
   return (
     <div>
-      <label>{label}
-        {field.type === 'boolean' && <Switch checked={value === true} onChange={onChange} />}
-        {field.type === 'text' && <TextArea {...commonProps} rows={1} />}
-        {(field.type === 'string' || field.type === 'number') && (
-          <TextInput type={field.type === 'number' ? 'number' : 'text'} {...commonProps} />
+      <label>
+        {type === 'boolean' && <Switch checked={value === true} onChange={onChange} />}
+        {type === 'text' && <TextArea {...commonProps} rows={5} />}
+        {(type === 'string' || type === 'number') && (
+          <TextInput type={type === 'number' ? 'number' : 'text'} {...commonProps} />
         )}
       </label>
     </div>

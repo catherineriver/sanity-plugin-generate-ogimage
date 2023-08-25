@@ -1,82 +1,65 @@
-import { EditorLayout, LayoutData } from './types'
+import {EditorLayout, LayoutData} from './types'
 import download from 'downloadjs'
-import { toPng } from 'html-to-image'
-import React, { useEffect, useState, useRef } from 'react'
+import {toPng} from 'html-to-image'
+import React, {useState, useRef, useCallback} from 'react'
 
 import defaultLayout from './defaultLayout'
-import { EditorProps } from './Editor'
+import {EditorProps} from './Editor'
 
-function useEditorLogic({ document, layouts, onSelect }: EditorProps): {
-  activeLayout: EditorLayout
-  setActiveLayout: (newLayout: EditorLayout) => void
-  disabled: boolean
-  generateImage: (e: React.FormEvent) => void
-  downloadImage: (e: React.FormEvent) => void
-  captureRef?: React.RefObject<HTMLDivElement>;
-  data: LayoutData
-  setData: (newData: LayoutData) => void
-} {
+function useEditorLogic({document, layouts, onSelect}: EditorProps) {
   const captureRef = useRef<HTMLDivElement>(null)
-
   const [status, setStatus] = useState<'idle' | 'error' | 'loading' | 'success'>('idle')
   const disabled = status === 'loading'
-  const layoutsExist = layouts && layouts[0]?.component;
+  const layoutsExist = layouts && layouts[0]?.component
 
   const [activeLayout, setActiveLayout] = useState<EditorLayout>(
     layoutsExist ? layouts[0] : defaultLayout
-  );
-  // @ts-ignore
-  const prepare = activeLayout.prepare(document);
-
-  const [data, setData] = useState<LayoutData>(
-    // Only asset sources (which include onSelect) should use the prepare function
-    onSelect
-      // @ts-ignore
-      ? activeLayout.prepare(document)
-      : // Studio tools should start with empty data
-      {}
   )
 
-  useEffect(() => {
-    setData(prepare);
-  }, [activeLayout])
+  const prepare = activeLayout.prepare ? activeLayout.prepare(document) : undefined;
+  const [data, setData] = useState<LayoutData>(onSelect && prepare ? prepare : {})
 
-  async function generateImage(e: React.FormEvent) {
-    e.preventDefault()
-    if (!captureRef?.current) {
-      return
-    }
-    try {
-      setStatus('loading')
-      const imgBase64 = await toPng(captureRef.current, {
-        quality: 1,
-        pixelRatio: 1,
-      })
-      setStatus('success')
-      if (onSelect) {
-        onSelect([
-          {
-            kind: 'base64',
-            value: imgBase64,
-            assetDocumentProps: {
-              originalFilename: `OG Image - ${new Date(Date.now()).toISOString()}`,
-              source: {
-                name: 'asset-source-ogimage',
-                id: 'asset-source-ogimage',
+  const generateImage = useCallback(
+    async (e: React.FormEvent) => {
+      e.preventDefault()
+      if (!captureRef?.current) {
+        console.error('Capture reference is missing.')
+        return
+      }
+      try {
+        setStatus('loading')
+        const imgBase64 = await toPng(captureRef.current, {
+          quality: 1,
+          pixelRatio: 1,
+        })
+        setStatus('success')
+        if (onSelect) {
+          onSelect([
+            {
+              kind: 'base64',
+              value: imgBase64,
+              assetDocumentProps: {
+                originalFilename: `OG Image - ${new Date(Date.now()).toISOString()}`,
+                source: {
+                  name: 'asset-source-ogimage',
+                  id: 'asset-source-ogimage',
+                },
               },
             },
-          },
-        ])
+          ])
+        }
+      } catch (error) {
+        setStatus('error')
+        console.error('Error generating image:', error)
       }
-    } catch (error) {
-      setStatus('error')
-      console.error(error)
-    }
-  }
+    },
+    [onSelect]
+  )
 
-  async function downloadImage(e: React.FormEvent) {
+  const downloadImage = useCallback(async (e: React.FormEvent) => {
     e.preventDefault()
     if (!captureRef?.current) {
+      console.error('Capture reference is missing.')
       return
     }
     try {
@@ -86,13 +69,12 @@ function useEditorLogic({ document, layouts, onSelect }: EditorProps): {
         pixelRatio: 1,
       })
       setStatus('success')
-      download(imgBase64, 'generated.png')
-
+      download(imgBase64, `OG Image - ${new Date(Date.now()).toISOString()}.png`)
     } catch (error) {
       setStatus('error')
-      console.error(error)
+      console.error('Error downloading image:', error)
     }
-  }
+  }, [])
 
   return {
     activeLayout,
