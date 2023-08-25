@@ -9,6 +9,8 @@ interface SelectedAsset {
   [key: string]: any
 }
 
+type ToolType = {props?: {layouts?: EditorLayout[]}} | string
+
 type Props = {
   // User-provided. See README for how they set it up
   layouts: EditorLayout[]
@@ -25,14 +27,14 @@ type Props = {
   /**
    * Exclusive to studio tools.
    */
-  tool?: string
+  tool?: ToolType
   document?: SanityDocument
   selectedAssets?: SelectedAsset[]
   selectionType: 'single'
   darkMode?: boolean
 }
 const MediaEditor: React.FC<Props> = (props) => {
-  const {tool, onClose, dialog, onSelect} = props
+  const {tool, onClose, dialog, onSelect} = props;
 
   const prefersDark = usePrefersDark()
   const scheme = prefersDark ? 'dark' : 'light'
@@ -44,7 +46,7 @@ const MediaEditor: React.FC<Props> = (props) => {
   }, [])
   useGlobalKeyDown(handleGlobalKeyDown)
 
-  let layouts = tool?.props?.layouts || props?.layouts
+  let layouts = (typeof tool === 'object' && tool.props?.layouts) || props.layouts;
   layouts = layouts?.filter((layout) => layout.prepare && layout.component)
 
   if (!layouts?.length) {
