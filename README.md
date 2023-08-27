@@ -7,9 +7,9 @@ Based on [sanity-plugin-asset-source-ogimage](https://www.npmjs.com/package/sani
 This Sanity plugin provides a tool to generate Open Graph (OG) images for your Sanity documents. It's designed to be flexible, allowing you to define custom layouts for the generated images.
 
 ## Features
-`Custom Layouts`: Define your own layouts for the generated images.
-`Live Preview`: See changes in real-time as you adjust the layout and content.
-`Download & Generate`: Generate the image and download it directly or use it within your Sanity documents.
+- **Custom Layouts**: Craft your own layouts for the images.
+- **Live Preview**: Witness changes in real-time as you tweak the layout and content.
+- **Download & Generate**: Create the image and either download it instantly or integrate it within your Sanity documents.
 
 ## Installation
 🚨 You need ```@sanity 3.5.0``` or greater and ```react 18.0.0``` or greater
@@ -85,12 +85,12 @@ export default defineConfig({
 ## Components
 Here's a brief overview of the main components in the repository:
 
-`Editor`: The main editor component where users can select a layout, modify content, and generate the image.
-`Image`: A utility component to display Sanity images.
-`LayoutsPicker`: Allows users to pick from multiple available layouts.
-`EditorField`: Represents individual fields in the editor, like text inputs, switches, etc.
-`useEditorLogic`: A custom hook that encapsulates the logic for generating and downloading the image.
-`imageBuilder`: A utility to build image URLs using Sanity's image URL builder.
+- `Editor`: The main editor component where users can select a layout, modify content, and generate the image.
+- `Image`: A utility component to display Sanity images.
+- `LayoutsPicker`: Allows users to pick from multiple available layouts.
+- `EditorField`: Represents individual fields in the editor, like text inputs, switches, etc.
+- `useEditorLogic`: A custom hook that encapsulates the logic for generating and downloading the image.
+- `imageBuilder`: A utility to build image URLs using Sanity's image URL builder.
 
 ## License
 
