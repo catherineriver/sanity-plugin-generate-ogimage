@@ -13,10 +13,10 @@ function useEditorLogic({document, layouts, onSelect}: EditorProps) {
   const layoutsExist = layouts && layouts[0]?.component
 
   const [activeLayout, setActiveLayout] = useState<EditorLayout>(
-    layoutsExist ? layouts[0] : defaultLayout
+    layoutsExist ? layouts[0] : defaultLayout,
   )
 
-  const prepare = activeLayout.prepare ? activeLayout.prepare(document) : undefined;
+  const prepare = activeLayout.prepare ? activeLayout.prepare(document) : undefined
   const [data, setData] = useState<LayoutData>(onSelect && prepare ? prepare : {})
 
   const generateImage = useCallback(
@@ -53,7 +53,7 @@ function useEditorLogic({document, layouts, onSelect}: EditorProps) {
         console.error('Error generating image:', error)
       }
     },
-    [onSelect]
+    [onSelect],
   )
 
   const downloadImage = useCallback(async (e: React.FormEvent) => {

@@ -28,12 +28,11 @@ const EditorField: React.FC<EditorFieldProps> = ({field, data = {}, updateData, 
       updateData({
         ...data,
         [name]: newValue,
-      });
-      setValue(newValue || '');
+      })
+      setValue(newValue || '')
     },
-    [data, name, updateData, value]
-  );
-
+    [data, name, updateData, value],
+  )
 
   if (!type || !name || !updateData) {
     return null

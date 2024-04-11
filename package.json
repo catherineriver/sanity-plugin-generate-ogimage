@@ -18,24 +18,22 @@
   "author": "Katerina Baliasnikova <catherine_river@icloud.com>",
   "exports": {
     ".": {
-      "types": "./dist/index.d.ts",
       "source": "./src/index.ts",
       "require": "./dist/index.js",
-      "import": "./dist/index.esm.js",
-      "default": "./dist/index.esm.js"
+      "import": "./dist/index.esm.mjs",
+      "default": "./dist/index.esm.mjs"
     },
     "./package.json": "./package.json"
   },
   "main": "./dist/index.js",
   "module": "./dist/index.esm.js",
-  "source": "./src/index.ts",
-  "types": "./dist/index.d.ts",
   "files": [
     "dist",
     "sanity.json",
     "src",
     "v2-incompatible.js"
   ],
+  "sideEffects": true,
   "scripts": {
     "build": "run-s clean && plugin-kit verify-package --silent && pkg-utils build --strict && pkg-utils --strict",
     "clean": "rimraf dist",
@@ -60,7 +58,7 @@
     "@types/react": "^18.2.75",
     "@typescript-eslint/eslint-plugin": "^7.6.0",
     "@typescript-eslint/parser": "^7.6.0",
-    "eslint": "^8.51.0",
+    "eslint": "^8.56.0",
     "eslint-config-prettier": "^9.1.0",
     "eslint-config-sanity": "^7.1.2",
     "eslint-plugin-prettier": "^5.1.3",
@@ -83,5 +81,11 @@
   },
   "engines": {
     "node": ">=14"
+  },
+  "sanityPlugin": {
+    "verifyPackage": {
+      "module": false
+    }
   }
+
 }

@@ -1,6 +1,6 @@
-import { definePlugin } from 'sanity'
+import {definePlugin} from 'sanity'
 import MediaEditor from './app'
-import { EditorLayout } from './types'
+import {EditorLayout} from './types'
 
 interface GenerateOGImageConfig {
   layouts?: EditorLayout[]
@@ -35,7 +35,6 @@ export const generateOGImage = definePlugin<GenerateOGImageConfig>((config = {})
   // eslint-disable-next-line no-console
   console.log('hello there from sanity-plugin-generate-ogimage', config.layouts)
 
-
   return {
     name: 'sanity-plugin-generate-ogimage',
     tools: (prev, context) => {
@@ -47,11 +46,11 @@ export const generateOGImage = definePlugin<GenerateOGImageConfig>((config = {})
           component: MediaEditor,
           props: {
             layouts: config.layouts,
-          }
+          },
         },
       ]
     },
   }
 })
 
-export { MediaEditor }
+export {MediaEditor}

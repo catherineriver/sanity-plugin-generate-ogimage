@@ -7,18 +7,21 @@ Based on [sanity-plugin-asset-source-ogimage](https://www.npmjs.com/package/sani
 This Sanity plugin provides a tool to generate Open Graph (OG) images for your Sanity documents. It's designed to be flexible, allowing you to define custom layouts for the generated images.
 
 ## Features
+
 - **Custom Layouts**: Craft your own layouts for the images.
 - **Live Preview**: Witness changes in real-time as you tweak the layout and content.
 - **Download & Generate**: Create the image and either download it instantly or integrate it within your Sanity documents.
 
 ## Installation
-🚨 You need ```@sanity 3.5.0``` or greater and ```react 18.0.0``` or greater
+
+🚨 You need `@sanity 3.5.0` or greater and `react 18.0.0` or greater
 
 ```sh
 npm install @catherineriver/sanity-plugin-generate-ogimage
 ```
 
 ## Basic Usage
+
 ### As a studio tool
 
 Use it in `sanity.config.ts` (or .js):
@@ -34,7 +37,9 @@ export default defineConfig({
 ```
 
 ### As custom source in image field
+
 Use it as [source on a single type](https://www.sanity.io/docs/custom-asset-sources#e2077d7f8ae2)
+
 ```jsx
 {
     name: 'ogImage',
@@ -55,6 +60,7 @@ Use it as [source on a single type](https://www.sanity.io/docs/custom-asset-sour
 ```
 
 ## Advanced Usage with Custom Layouts
+
 You can define custom layouts for your generated images. A layout is essentially a React component that receives certain props and renders the desired output.
 
 Here's a basic structure of a layout:
@@ -71,18 +77,20 @@ export default MyCustomLayout;
 ```
 
 To use your custom layouts, modify your sanity.config.ts (or .js) as follows:
+
 ```jsx
-import { defineConfig } from "sanity";
-import { generateOGImage } from "sanity-plugin-generate-ogimage";
-import MyCustomLayout from "./path-to-your-layout";
+import {defineConfig} from 'sanity'
+import {generateOGImage} from 'sanity-plugin-generate-ogimage'
+import MyCustomLayout from './path-to-your-layout'
 
 export default defineConfig({
   // ... other config
-  plugins: [generateOGImage({ layouts: [MyCustomLayout] })],
-});
+  plugins: [generateOGImage({layouts: [MyCustomLayout]})],
+})
 ```
 
 ## Components
+
 Here's a brief overview of the main components in the repository:
 
 - `Editor`: The main editor component where users can select a layout, modify content, and generate the image.

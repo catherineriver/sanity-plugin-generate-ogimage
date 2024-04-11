@@ -34,7 +34,7 @@ type Props = {
   darkMode?: boolean
 }
 const MediaEditor: React.FC<Props> = (props) => {
-  const {tool, onClose, dialog, onSelect} = props;
+  const {tool, onClose, dialog, onSelect} = props
 
   const prefersDark = usePrefersDark()
   const scheme = prefersDark ? 'dark' : 'light'
@@ -46,7 +46,7 @@ const MediaEditor: React.FC<Props> = (props) => {
   }, [])
   useGlobalKeyDown(handleGlobalKeyDown)
 
-  let layouts = (typeof tool === 'object' && tool.props?.layouts) || props.layouts;
+  let layouts = (typeof tool === 'object' && tool.props?.layouts) || props.layouts
   layouts = layouts?.filter((layout) => layout.prepare && layout.component)
 
   if (!layouts?.length) {
